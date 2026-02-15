@@ -1,0 +1,69 @@
+{
+  "patients": [
+    {
+      "id": "_E27zSfj",
+      "name": "Ahmed Essam",
+      "labels": [],
+      "reports": [
+        {
+          "text": "Hi I broke my leg any advice?",
+          "timestamp": "2026-02-15T04:29:21.865Z"
+        }
+      ],
+      "createdAt": "2026-02-15T04:28:30.402Z",
+      "condition": "Broken Leg",
+      "analysis": {
+        "isSafe": true,
+        "interactions": [],
+        "schedule": [
+          {
+            "medication": "Paracetamol",
+            "times": [
+              "08:00",
+              "20:00"
+            ]
+          },
+          {
+            "medication": "Alphacemol",
+            "times": [
+              "08:00",
+              "14:00",
+              "20:00"
+            ]
+          }
+        ],
+        "recommendations": []
+      },
+      "medications": [
+        {
+          "name": "Paracetamol",
+          "dose": "per schedule",
+          "frequencyPerDay": 1
+        },
+        {
+          "name": "Alphacemol",
+          "dose": "per schedule",
+          "frequencyPerDay": 1
+        }
+      ],
+      "feedback": [
+        {
+          "text": "Is it Requires Surgery?",
+          "timestamp": "2026-02-15T04:32:21.922Z"
+        },
+        {
+          "text": "Not at the moment :)",
+          "timestamp": "2026-02-15T04:40:58.024Z",
+          "sender": "doctor"
+        }
+      ]
+    },
+    {
+      "id": "frX2uTDC",
+      "name": "John",
+      "labels": [],
+      "reports": [],
+      "createdAt": "2026-02-15T04:57:09.952Z"
+    }
+  ]
+}
