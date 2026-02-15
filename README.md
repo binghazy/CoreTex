@@ -102,7 +102,13 @@ npm run dev:patient
 
 8. Open the apps in a browser:
 - Doctor UI: `http://localhost:5173` or  `http://localhost:5178`
+
+![Image](https://drive.google.com/uc?export=view&id=1Zi4yEgLL7HjJw6JOLHf9m5cGoM5MCUz_)
+
 - Patient UI: `http://localhost:5174` or  `http://localhost:5175`
+
+![Image](https://drive.google.com/uc?export=view&id=1FhwDjbCo367Fd6gz8H2w5TK2mTrfienv)
+
 - API health check: `http://localhost:4000/health`
 
 9. Doctor login credentials:
