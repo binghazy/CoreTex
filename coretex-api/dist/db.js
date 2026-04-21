@@ -3,7 +3,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DB_PATH = path.resolve(__dirname, "..", "data", "patients.json");
+const isVercelRuntime = process.env.VERCEL === "1";
+const DB_PATH = isVercelRuntime
+    ? path.resolve("/tmp", "coretex-patients.json")
+    : path.resolve(__dirname, "..", "data", "patients.json");
 function ensureDbFile() {
     const dir = path.dirname(DB_PATH);
     if (!fs.existsSync(dir))

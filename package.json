@@ -11,6 +11,7 @@
     "dev:api": "npm --workspace coretex-api run dev",
     "dev:doctor": "npm --workspace apps/doctor-interface run dev",
     "dev:patient": "npm --workspace apps/patient-interface run dev",
+    "dev:all": "node scripts/dev-all.mjs",
     "build": "npm run -ws build"
   }
 }

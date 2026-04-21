@@ -322,15 +322,21 @@ app.post("/api/v1/ask-ai", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`CoreTex API listening on http://localhost:${port}`);
-  // Example usage of the Gemini client (will use GEMINI_API_KEY env var)
-  (async () => {
-    try {
-      const sample = await askGemini3("Say hello from Gemini Flash model.");
-      console.log("Gemini sample output:", sample);
-    } catch (err) {
-      console.warn("Gemini client not available:", (err as Error).message);
-    }
-  })();
-});
+const isVercelRuntime = process.env.VERCEL === "1";
+
+if (!isVercelRuntime) {
+  app.listen(port, () => {
+    console.log(`CoreTex API listening on http://localhost:${port}`);
+    // Example usage of the Gemini client (will use GEMINI_API_KEY env var)
+    (async () => {
+      try {
+        const sample = await askGemini3("Say hello from Gemini Flash model.");
+        console.log("Gemini sample output:", sample);
+      } catch (err) {
+        console.warn("Gemini client not available:", (err as Error).message);
+      }
+    })();
+  });
+}
+
+export default app;

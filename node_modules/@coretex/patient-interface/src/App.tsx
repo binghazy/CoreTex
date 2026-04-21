@@ -7,6 +7,9 @@ import healthVisual3 from "./assets/health-visual-3.svg";
 const API_BASE =
   (import.meta.env.VITE_API_BASE as string | undefined)?.trim() ||
   "http://localhost:4000";
+const DOCTOR_PORTAL_URL =
+  (import.meta.env.VITE_DOCTOR_PORTAL_URL as string | undefined)?.trim() ||
+  "http://localhost:5173";
 
 function toRequestErrorMessage(caught: unknown, fallback: string) {
   if (
@@ -67,7 +70,10 @@ function PatientLogo() {
 
 function PatientVisualGallery() {
   return (
-    <section className="patient-visual-gallery" aria-label="Patient support visuals">
+    <section
+      className="patient-visual-gallery"
+      aria-label="Patient support visuals"
+    >
       <img src={healthVisual1} alt="Health monitoring visual" />
       <img src={healthVisual2} alt="Medication management visual" />
       <img src={healthVisual3} alt="Care team communication visual" />
@@ -75,9 +81,58 @@ function PatientVisualGallery() {
   );
 }
 
+const landingHighlights = [
+  {
+    value: "24/7",
+    title: "Always-On Reporting",
+    detail:
+      "Patients can report symptoms any time while doctors review updates from one shared workspace.",
+  },
+  {
+    value: "<2 min",
+    title: "Fast Intake",
+    detail:
+      "Structured symptom submission keeps handoff clear and avoids long back-and-forth.",
+  },
+  {
+    value: "1 view",
+    title: "Unified Context",
+    detail:
+      "Symptoms, plan details, and patient-doctor messages stay connected in one treatment journey.",
+  },
+];
+
+const landingWorkflow = [
+  {
+    step: "01",
+    title: "Patient Reports Symptoms",
+    detail:
+      "Patients submit symptoms quickly through a guided interface built for clarity.",
+  },
+  {
+    step: "02",
+    title: "Doctor Reviews Context",
+    detail:
+      "Doctors receive the latest report and patient history in one focused dashboard.",
+  },
+  {
+    step: "03",
+    title: "Treatment Plan is Shared",
+    detail:
+      "A clear medication timeline is generated so patients know what to take and when.",
+  },
+  {
+    step: "04",
+    title: "Care Continues in Messages",
+    detail:
+      "Both sides keep communicating in-app when symptoms evolve or adjustments are needed.",
+  },
+];
+
 export function App() {
   const [patientId, setPatientId] = useState<string | null>(null);
   const [patientName, setPatientName] = useState<string>("");
+  const [showPatientEntry, setShowPatientEntry] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -215,12 +270,17 @@ export function App() {
     sessionStorage.clear();
     setPatientId(null);
     setPatientName("");
+    setShowPatientEntry(false);
     setPatientData(null);
     setSymptom("");
     setSymptomSubmitted(false);
     setMessageInput("");
     setMessageSubmitted(false);
     setError("");
+  };
+
+  const openDoctorPortal = () => {
+    window.location.assign(DOCTOR_PORTAL_URL);
   };
 
   const hasCondition = Boolean(patientData?.condition);
@@ -340,6 +400,145 @@ export function App() {
   );
 
   if (!patientId) {
+    if (!showPatientEntry) {
+      return (
+        <main className="landing-shell">
+          <div className="landing-glow landing-glow-left" aria-hidden></div>
+          <div className="landing-glow landing-glow-right" aria-hidden></div>
+          <section className="landing-card landing-site">
+            <nav className="landing-nav">
+              <a
+                href="#home"
+                className="landing-brand-link"
+                aria-label="CoreTex home"
+              >
+                <img
+                  src={coretexLogo}
+                  alt="CoreTex logo"
+                  className="landing-brand-logo"
+                />
+              </a>
+
+              <div className="landing-nav-links">
+                <a href="#home" className="landing-nav-link">
+                  Home
+                </a>
+                <a href="#workflow" className="landing-nav-link">
+                  Workflow
+                </a>
+                <a href="#about" className="landing-nav-link">
+                  About Us
+                </a>
+                <a href="#portals" className="landing-nav-link">
+                  Portals
+                </a>
+              </div>
+            </nav>
+
+            <section id="home" className="landing-hero">
+              <p className="landing-kicker">CoreTex Integrated Care Platform</p>
+              <h1>Connected Care for Patients and Doctors</h1>
+              <p className="landing-subtitle">
+                CoreTex brings reporting, review, treatment planning, and
+                patient-doctor messaging into one smooth experience that helps
+                teams move faster with better clarity.
+              </p>
+              <a href="#portals" className="landing-scroll-link">
+                Explore Portals <span aria-hidden>↓</span>
+              </a>
+            </section>
+
+            <section className="landing-highlights" aria-label="Platform highlights">
+              {landingHighlights.map((highlight) => (
+                <article
+                  key={highlight.title}
+                  className="landing-highlight-card"
+                >
+                  <p className="landing-highlight-value">{highlight.value}</p>
+                  <h3>{highlight.title}</h3>
+                  <p>{highlight.detail}</p>
+                </article>
+              ))}
+            </section>
+
+            <section id="portals" className="landing-actions">
+              <button
+                type="button"
+                className="landing-choice landing-choice-patient"
+                onClick={() => setShowPatientEntry(true)}
+              >
+                <span className="landing-choice-tag">For Patients</span>
+                <strong>Patient Portal</strong>
+                <p>
+                  Report symptoms, view your treatment plan, and stay in touch
+                  with your doctor.
+                </p>
+              </button>
+              <button
+                type="button"
+                className="landing-choice landing-choice-doctor"
+                onClick={openDoctorPortal}
+              >
+                <span className="landing-choice-tag">For Doctors</span>
+                <strong>Doctor Portal</strong>
+                <p>
+                  Review patient updates, assign treatment plans, and
+                  coordinate care decisions.
+                </p>
+              </button>
+            </section>
+
+            <section id="workflow" className="landing-workflow">
+              <div className="landing-workflow-head">
+                <p className="landing-kicker">How It Works</p>
+                <h2>One Connected Flow From Symptoms to Treatment</h2>
+              </div>
+              <div className="landing-workflow-grid">
+                {landingWorkflow.map((item) => (
+                  <article key={item.step} className="landing-workflow-card">
+                    <p className="landing-workflow-step">{item.step}</p>
+                    <h3>{item.title}</h3>
+                    <p>{item.detail}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <footer id="about" className="landing-footer">
+              <h2>About Us</h2>
+              <p>
+                We built CoreTex to make collaboration between care teams and
+                patients simple, transparent, and actionable at every stage.
+              </p>
+              <div className="landing-footer-grid">
+                <article className="landing-footer-card">
+                  <h3>Patient First</h3>
+                  <p>
+                    Patients can quickly share symptoms, view plans, and receive
+                    clear next steps without confusion.
+                  </p>
+                </article>
+                <article className="landing-footer-card">
+                  <h3>Doctor Focused</h3>
+                  <p>
+                    Doctors get a streamlined workspace to assess reports and
+                    prescribe with confidence.
+                  </p>
+                </article>
+                <article className="landing-footer-card">
+                  <h3>Unified Workflow</h3>
+                  <p>
+                    Both sides stay aligned in one connected system with faster
+                    communication and fewer gaps.
+                  </p>
+                </article>
+              </div>
+            </footer>
+          </section>
+        </main>
+      );
+    }
+
     return (
       <main className="auth-container">
         <div className="auth-card">
@@ -349,6 +548,15 @@ export function App() {
           </div>
 
           <div className="auth-form">
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={() => {
+                setShowPatientEntry(false);
+                setError("");
+              }}
+            >
+              Back
+            </button>
             <h2>Welcome</h2>
             <p className="form-description">Tell us your name to get started</p>
             {error && <div className="error-message">{error}</div>}

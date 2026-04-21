@@ -12,8 +12,7 @@ This repository is scaffolded as a TypeScript monorepo with clear separation bet
 apps/
   doctor-interface/      # Doctor-facing web UI
   patient-interface/     # Patient-facing web UI
-services/
-  coretex-api/           # Backend API
+coretex-api/             # Backend API
 packages/
   shared-types/          # Shared domain types
   coretex-engine/        # Drug interaction + scheduling + alternatives logic
@@ -67,10 +66,69 @@ npm run dev:doctor
 npm run dev:patient
 ```
 
+Or run everything (API + doctor + patient) with one command:
+
+```bash
+npm run dev:all
+```
+
 ## Notes
 
 - This is a production-oriented scaffold, not a complete clinical product.
 - Real deployment should use a validated clinical knowledge source and full HIPAA-compliant controls.
+
+## Deploy to Vercel (Doctor + Patient)
+
+Both frontend apps are ready to deploy to Vercel as separate Vite projects.
+
+Deploy order:
+1. Deploy your backend API first (Vercel or any HTTPS host).
+2. Deploy the doctor app.
+3. Deploy the patient app.
+
+### 1) Deploy API (`coretex-api`)
+
+1. Create a new Vercel project from this repository.
+2. Set **Root Directory** to `coretex-api`.
+3. Set environment variable (optional, for AI endpoint):
+
+```bash
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+4. Deploy and copy the API URL (example: `https://coretex-api.vercel.app`).
+
+### 2) Deploy Doctor Interface
+
+1. Create a new Vercel project from this repository.
+2. Set **Root Directory** to `apps/doctor-interface`.
+3. Set environment variable:
+
+```bash
+VITE_API_BASE=https://your-api-domain.example.com
+```
+
+4. Deploy.
+
+### 3) Deploy Patient Interface
+
+1. Create another Vercel project from the same repository.
+2. Set **Root Directory** to `apps/patient-interface`.
+3. Set environment variables:
+
+```bash
+VITE_API_BASE=https://your-api-domain.example.com
+VITE_DOCTOR_PORTAL_URL=https://your-doctor-domain.vercel.app
+```
+
+4. Deploy.
+
+Notes:
+- Deploy each frontend from source, not by manually uploading `dist`.
+- The patient landing page "Doctor Portal" button uses `VITE_DOCTOR_PORTAL_URL`.
+- `coretex-api` must be reachable over HTTPS from both frontends.
+- In Vercel runtime, API demo data is stored in `/tmp/coretex-patients.json` (ephemeral).
+  For durable production data, replace file storage with a real database.
 
 ## Want to Run This Project? Here is a Step by Step :)
 
@@ -108,6 +166,12 @@ npm run dev:doctor
 
 ```bash
 npm run dev:patient
+```
+
+Alternative (single terminal):
+
+```bash
+npm run dev:all
 ```
 
 8. Open the apps in a browser:
